@@ -6,11 +6,11 @@ import math
 
 win_x = 910
 win_y = 900
-num_objects = 25
+num_objects = 5
 speed_range = 5
-speed_mag_limit = 10
+speed_mag_limit = 5
 acc_range = 0
-acc_mag_limit = 0.20
+acc_mag_limit = 0.01
 lim_mass = 3
 
 
@@ -106,6 +106,7 @@ class Planet(pyglet.shapes.Circle, Vector):
         self.speed = Vector(dy, dx)
         self.acc = Vector(ddx, ddy)
         self.mass = self.radius
+        self.trails = []
 
     def calculate_acc(self, vec):
         temp = vec.copy()
@@ -114,6 +115,7 @@ class Planet(pyglet.shapes.Circle, Vector):
         self.acc = temp.copy()
 
     def move(self, dt):
+        old_x, old_y = self.x, self.y
         self.calculate_acc(space.mouse)
         self.acc.scalar_v(acc_mag_limit)
         self.speed.plus_v(self.acc)
@@ -121,9 +123,13 @@ class Planet(pyglet.shapes.Circle, Vector):
             self.speed.normalize_v()
             self.speed.scalar_v(speed_mag_limit)
         self.plus_v(self.speed)
+        trail = pyglet.shapes.Line(
+            self.x, self.y, old_x, old_y, 1, color=(100, 100, 100), batch=space.batch
+        )
+        self.trails.append(trail)
 
 
 space = Space(win_x, win_y, num_objects)
-pyglet.clock.schedule(space.update)
-# pyglet.clock.schedule_interval(space.update, 0.1)
+# pyglet.clock.schedule(space.update)
+pyglet.clock.schedule_interval(space.update, 1 / 200)
 pyglet.app.run()
