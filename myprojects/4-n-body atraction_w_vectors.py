@@ -10,7 +10,7 @@ num_objects = 5
 speed_range = 5
 speed_mag_limit = 5
 acc_range = 0
-acc_mag_limit = 0.01
+acc_mag_limit = 0.1
 lim_mass = 3
 
 
@@ -130,6 +130,6 @@ class Planet(pyglet.shapes.Circle, Vector):
 
 
 space = Space(win_x, win_y, num_objects)
-# pyglet.clock.schedule(space.update)
-pyglet.clock.schedule_interval(space.update, 1 / 200)
+pyglet.clock.schedule(space.update)
+# pyglet.clock.schedule_interval(space.update, 1 / 200)
 pyglet.app.run()
