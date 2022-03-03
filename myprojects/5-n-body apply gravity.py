@@ -8,7 +8,7 @@ win_x = 910
 win_y = 900
 num_objects = 5
 speed_range = 5
-speed_mag_limit = 5
+speed_mag_limit = 50
 acc_range = 0
 acc_mag_limit = 0.1
 lim_mass = 30
@@ -50,7 +50,7 @@ class Space(pyglet.window.Window):
     def __init__(self, width, height, noo):
         super().__init__(width, height)
         self.number_of_obj = noo
-        self.gravity = Vector(0, -0.098)
+        self.gravity = Vector(0, -0.0098)
         self.batch = pyglet.shapes.Batch()
         self.list_of_obj = []
         self.mouse = Vector(0, 0)
@@ -62,9 +62,9 @@ class Space(pyglet.window.Window):
     #     self.mouse = Vector(x, y)
 
     def create_planet(self):
-        ox, oy = random.uniform(5, self.width), random.uniform(5, self.height)
+        ox, oy = random.uniform(5, self.width), 300
         omass = random.uniform(5, lim_mass)
-        odx, ody = (0, 0)
+        odx, ody = (10, 0)
         oddx, oddy = (0, 0)
         ocolor = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
         return Planet(
@@ -111,22 +111,32 @@ class Planet(pyglet.shapes.Circle, Vector):
         # temp.normalize_v()
         self.acc.plus_v(vec)
 
+    def check_edge(self):
+        if (self.y - self.radius) < 0:
+            self.y = self.radius
+            self.speed.y = -self.speed.y
+        if (self.y + self.radius) > space.height:
+            self.y = space.height - self.radius
+            self.speed.y = -self.speed.y
+        if (self.x - self.radius) < 0:
+            self.x = self.radius
+            self.speed.x = -self.speed.x
+        if (self.x + self.radius) > space.width:
+            self.x = space.height - self.radius
+            self.speed.x = -self.speed.x
+
     def move(self, dt):
-        old_x, old_y = self.x, self.y
         self.calculate_acc(space.gravity)
-        self.acc.scalar_v(1)
         self.speed.plus_v(self.acc)
-        # if self.speed.magnitute_v() > speed_mag_limit:
-        #     self.speed.normalize_v()
-        #     self.speed.scalar_v(speed_mag_limit)
+        old_x, old_y = self.x, self.y
         self.plus_v(self.speed)
-        trail = pyglet.shapes.Line(
-            self.x, self.y, old_x, old_y, 1, color=(100, 100, 100), batch=space.batch
-        )
+        self.check_edge()
+        trail = pyglet.shapes.Line(self.x, self.y, old_x, old_y, 1, batch=space.batch)
+        trail.opacity = 10
         self.trails.append(trail)
 
 
 space = Space(win_x, win_y, num_objects)
 pyglet.clock.schedule(space.update)
-# pyglet.clock.schedule_interval(space.update, 1 / 200)
+# pyglet.clock.schedule_interval(space.update, 1 / 2)
 pyglet.app.run()
