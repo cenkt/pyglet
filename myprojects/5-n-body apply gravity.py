@@ -11,7 +11,7 @@ speed_range = 5
 speed_mag_limit = 50
 acc_range = 0
 acc_mag_limit = 0.1
-lim_mass = 30
+lim_mass = 300
 
 
 class Vector:
@@ -70,7 +70,7 @@ class Space(pyglet.window.Window):
         return Planet(
             x=ox,
             y=oy,
-            radius=omass,
+            radius=math.sqrt(omass),
             dx=odx,
             dy=ody,
             ddx=oddx,
@@ -102,7 +102,7 @@ class Planet(pyglet.shapes.Circle, Vector):
 
         self.speed = Vector(dy, dx)
         self.acc = Vector(ddx, ddy)
-        self.mass = math.sqrt(self.radius)
+        self.mass = math.pow(self.radius, 2)
         self.trails = []
 
     def calculate_acc(self, vec):
