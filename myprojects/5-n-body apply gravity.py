@@ -50,7 +50,7 @@ class Space(pyglet.window.Window):
     def __init__(self, width, height, noo):
         super().__init__(width, height)
         self.number_of_obj = noo
-        self.gravity = Vector(0, -0.00098)
+        self.gravity = Vector(0.001, -0.9)
         self.batch = pyglet.shapes.Batch()
         self.list_of_obj = []
         self.mouse = Vector(0, 0)
@@ -62,10 +62,10 @@ class Space(pyglet.window.Window):
     #     self.mouse = Vector(x, y)
 
     def create_planet(self):
-        ox, oy = random.uniform(5, self.width), 300
+        ox, oy = random.uniform(5, self.width), 500
         omass = random.uniform(5, lim_mass)
-        odx, ody = (10, 0)
-        oddx, oddy = (0, 0)
+        odx, ody = 0, 0
+        oddx, oddy = 0, 0
         ocolor = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
         return Planet(
             x=ox,
@@ -100,7 +100,7 @@ class Planet(pyglet.shapes.Circle, Vector):
         )
         Vector.__init__(self, x, y)
 
-        self.speed = Vector(dy, dx)
+        self.speed = Vector(dx, dy)
         self.acc = Vector(ddx, ddy)
         self.mass = math.pow(self.radius, 2)
         self.trails = []
@@ -109,30 +109,30 @@ class Planet(pyglet.shapes.Circle, Vector):
         # temp = vec.copy()
         # temp.minus_v(self)
         # temp.normalize_v()
-        self.acc.plus_v(vec)
+        self.acc = vec
 
     def check_edge(self):
         if (self.y - self.radius) < 0:
-            self.y = self.radius
+            self.y = 0
             self.speed.y = -self.speed.y
         if (self.y + self.radius) > space.height:
-            self.y = space.height - self.radius
+            self.y = space.height
             self.speed.y = -self.speed.y
         if (self.x - self.radius) < 0:
-            self.x = self.radius
+            self.x = 0
             self.speed.x = -self.speed.x
         if (self.x + self.radius) > space.width:
-            self.x = space.height - self.radius
+            self.x = space.width
             self.speed.x = -self.speed.x
 
     def move(self, dt):
+        old_x, old_y = self.x, self.y
         self.calculate_acc(space.gravity)
         self.speed.plus_v(self.acc)
-        old_x, old_y = self.x, self.y
-        self.plus_v(self.speed)
         self.check_edge()
+        self.plus_v(self.speed)
         trail = pyglet.shapes.Line(self.x, self.y, old_x, old_y, 1, batch=space.batch)
-        trail.opacity = 10
+        trail.opacity = 100
         self.trails.append(trail)
 
 
