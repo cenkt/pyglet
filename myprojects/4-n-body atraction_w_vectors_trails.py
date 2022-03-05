@@ -58,7 +58,7 @@ class Space(pyglet.window.Window):
         for i in range(self.number_of_obj):
             self.list_of_obj.append(self.create_planet())
 
-    def on_mouse_motion(self, x, y, dx, dy):
+    def on_mouse_press(self, x, y, dx, dy):
         # print(x, y)
         self.mouse = Vector(x, y)
 

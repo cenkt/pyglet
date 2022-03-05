@@ -50,7 +50,7 @@ class Space(pyglet.window.Window):
     def __init__(self, width, height, noo):
         super().__init__(width, height)
         self.number_of_obj = noo
-        self.gravity = Vector(0, -0.0098)
+        self.gravity = Vector(0, -0.00098)
         self.batch = pyglet.shapes.Batch()
         self.list_of_obj = []
         self.mouse = Vector(0, 0)
