@@ -6,7 +6,7 @@ import math
 
 win_x = 400
 win_y = 400
-num_objects = 1
+num_objects = 3
 speed_range = 5
 speed_mag_limit = 50
 # acc_range = 0
@@ -62,8 +62,8 @@ class Space(pyglet.window.Window):
     #     self.mouse = Vector(x, y)
 
     def create_planet(self):
-        ox, oy = 200, 200
-        omass = 256
+        ox, oy = random.uniform(5, self.width), random.uniform(5, self.height)
+        omass = random.uniform(5, lim_mass)
         odx, ody = 0, 0
         oddx, oddy = 0, 0
         ocolor = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
