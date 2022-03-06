@@ -6,7 +6,7 @@ import math
 
 win_x = 400
 win_y = 400
-num_objects = 3
+num_objects = 1
 speed_range = 5
 speed_mag_limit = 50
 lim_mass = 300
@@ -49,6 +49,7 @@ class Space(pyglet.window.Window):
         super().__init__(width, height)
         self.number_of_obj = noo
         self.gravity = Vector(0, -0.4)
+        self.wind = Vector(0, 0)
         self.batch = pyglet.shapes.Batch()
         self.list_of_obj = []
         self.mouse = Vector(0, 0)
@@ -56,8 +57,11 @@ class Space(pyglet.window.Window):
         for i in range(self.number_of_obj):
             self.list_of_obj.append(self.create_planet())
 
-    # def on_mouse_motion(self, x, y, dx, dy):
-    #     self.mouse = Vector(x, y)
+    def on_mouse_press(self, x, y, button, modifiers):
+        self.wind = Vector(0.2, 0)
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.wind = Vector(0, 0)
 
     def create_planet(self):
         ox, oy = random.uniform(5, self.width), random.uniform(5, self.height)
@@ -80,6 +84,7 @@ class Space(pyglet.window.Window):
     def update(self, dt):
         for planet in self.list_of_obj:
             planet.move(dt)
+        # space.wind = Vector(0, 0)
 
     def on_draw(self):
         self.clear()
@@ -104,10 +109,7 @@ class Planet(pyglet.shapes.Circle, Vector):
         self.trails = []
 
     def calculate_acc(self, vec):
-        # temp = vec.copy()
-        # temp.minus_v(self)
-        # temp.normalize_v()
-        self.acc = vec
+        self.acc.plus_v(vec)
 
     def check_edge(self):
         if (self.y) <= self.radius:
@@ -129,12 +131,14 @@ class Planet(pyglet.shapes.Circle, Vector):
     def move(self, dt):
         old_x, old_y = self.x, self.y
         self.calculate_acc(space.gravity)
+        self.calculate_acc(space.wind)
         self.speed.plus_v(self.acc)
         self.plus_v(self.speed)
         self.check_edge()
         trail = pyglet.shapes.Line(self.x, self.y, old_x, old_y, 1, batch=space.batch)
         trail.opacity = 100
         self.trails.append(trail)
+        self.acc = Vector(0, 0)
 
 
 space = Space(win_x, win_y, num_objects)
