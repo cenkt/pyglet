@@ -6,7 +6,8 @@ import math
 
 win_x = 400
 win_y = 400
-num_objects = 1
+show_trail = False
+num_objects = 5
 speed_range = 5
 speed_mag_limit = 50
 lim_mass = 300
@@ -58,7 +59,8 @@ class Space(pyglet.window.Window):
             self.list_of_obj.append(self.create_planet())
 
     def on_mouse_press(self, x, y, button, modifiers):
-        self.wind = Vector(0.2, 0)
+        # self.wind = Vector(0.2, 0)
+        self.wind = Vector(random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5))
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.wind = Vector(0, 0)
@@ -135,9 +137,10 @@ class Planet(pyglet.shapes.Circle, Vector):
         self.speed.plus_v(self.acc)
         self.plus_v(self.speed)
         self.check_edge()
-        trail = pyglet.shapes.Line(self.x, self.y, old_x, old_y, 1, batch=space.batch)
-        trail.opacity = 100
-        self.trails.append(trail)
+        if show_trail:
+            trail = pyglet.shapes.Line(self.x, self.y, old_x, old_y, 1, batch=space.batch)
+            trail.opacity = 100
+            self.trails.append(trail)
         self.acc = Vector(0, 0)
 
 
