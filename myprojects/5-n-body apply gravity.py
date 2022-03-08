@@ -4,12 +4,12 @@ import random
 import math
 
 
-win_x = 400
-win_y = 400
-num_objects = 3
-speed_range = 5
-speed_mag_limit = 50
-lim_mass = 300
+WIN_X = 400
+WIN_Y = 400
+NUM_OBJECTS = 3
+SPEED_RANGE = 5
+SPEED_MAG_LIMIT = 50
+LIM_MASS = 300
 
 
 class Vector:
@@ -61,7 +61,7 @@ class Space(pyglet.window.Window):
 
     def create_planet(self):
         ox, oy = random.uniform(5, self.width), random.uniform(5, self.height)
-        omass = random.uniform(5, lim_mass)
+        omass = random.uniform(5, LIM_MASS)
         odx, ody = 0, 0
         oddx, oddy = 0, 0
         ocolor = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
@@ -137,7 +137,7 @@ class Planet(pyglet.shapes.Circle, Vector):
         self.trails.append(trail)
 
 
-space = Space(win_x, win_y, num_objects)
+space = Space(WIN_X, WIN_Y, NUM_OBJECTS)
 pyglet.clock.schedule(space.update)
 # pyglet.clock.schedule_interval(space.update, 1 / 2)
 pyglet.app.run()
