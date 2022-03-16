@@ -97,11 +97,6 @@ class Dot(pyglet.shapes.Circle, Vector):
         )
         Vector.__init__(self, x, y)
 
-        self.trails = []
-
-    def move(self, dt):
-        return
-
 
 canvas = Canvas(WIN_X, WIN_Y, NUM_OBJECTS)
 pyglet.clock.schedule(canvas.update)
