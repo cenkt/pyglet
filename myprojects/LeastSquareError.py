@@ -51,12 +51,7 @@ class Canvas(pyglet.window.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         self.list_of_obj.append(Dot(x, y, 3, 0, 0, 0, 0, (100, 100, 100), self.batch))
-
-    def on_mouse_release(self, x, y, button, modifiers):
-        return
-
-    def create_planet(self):
-        return
+        self.update()
 
     def calculate_line(self, loo):
         x_avg, y_avg = 0, 0
@@ -71,18 +66,13 @@ class Canvas(pyglet.window.Window):
             den += (i.x - x_avg) * (i.x - x_avg)
         return num / den, y_avg - (x_avg * num / den)
 
-    def update(self, dt):
+    def update(self):
         if len(self.list_of_obj) > 1:
             m, b = self.calculate_line(self.list_of_obj)
             x1, x2 = 0, self.width
             y1, y2 = x1 * m + b, x2 * m + b
             self.line = pyglet.shapes.Line(x1, y1, x2, y2, width=1, color=(250, 200, 100))
         return
-
-    def on_draw(self):
-        self.clear()
-        self.batch.draw()
-        self.line.draw()
 
 
 class Dot(pyglet.shapes.Circle, Vector):
@@ -99,6 +89,13 @@ class Dot(pyglet.shapes.Circle, Vector):
 
 
 canvas = Canvas(WIN_X, WIN_Y, NUM_OBJECTS)
-pyglet.clock.schedule(canvas.update)
-# pyglet.clock.schedule_interval(canvas.update, 1 / 2)
+
+
+@canvas.event
+def on_draw():
+    canvas.clear()
+    canvas.batch.draw()
+    canvas.line.draw()
+
+
 pyglet.app.run()
