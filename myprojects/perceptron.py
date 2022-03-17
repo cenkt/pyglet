@@ -1,4 +1,3 @@
-from mimetypes import guess_all_extensions
 import pyglet
 import random
 import math
@@ -50,6 +49,7 @@ class Perceptron:
         return "P_wghts%s" % (self.weights)
 
     def w_a(self, inpt):
+        inpt = numpy.array(inpt)
         return numpy.dot(self.weights, inpt)
 
     def guess(self, inpt):
@@ -99,7 +99,7 @@ class Dot(pyglet.shapes.Circle, Vector):
 
 canvas = Canvas(WIN_X, WIN_Y, NUM_OBJECTS)
 perc1 = Perceptron(2)
-ins = numpy.array([-0.5, 0.9])
+ins = [-0.5, 0.9]
 print(ins, perc1)
 print(perc1.w_a(ins), perc1.guess(ins))
 
