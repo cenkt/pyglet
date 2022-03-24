@@ -3,5 +3,8 @@
     "editor.fontFamily": "Cavolini, 'Courier New', monospace",
     "editor.letterSpacing": 0.85,
     "terminal.integrated.customGlyphs": false,
-    "conventionalCommits.scopes": ["gravity + wind (mouse press)"]
+    "conventionalCommits.scopes": [
+        "gravity + wind (mouse press)",
+        "perceptron w/ color and answer"
+    ]
 }

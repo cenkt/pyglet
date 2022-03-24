@@ -42,11 +42,6 @@ class Canvas(pyglet.window.Window):
             print(xi)
             yi = np.random.uniform(0, WIN_Y)
             self.list_of_obj.append(Dot(xi, yi, 3, color=(200, 100, 100), batch=self.batch))
-        # self.mouse = Vector(0, 0)
-
-    # def on_mouse_press(self, x, y, button, modifiers):
-    #     self.list_of_obj.append(Dot(x, y, 3, 0, 0, 0, 0, (100, 100, 100), self.batch))
-    #     self.update()
 
     def on_mouse_release(self, x, y, button, modifiers):
         return
