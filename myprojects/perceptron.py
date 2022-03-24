@@ -19,7 +19,7 @@ class Perceptron:
         self.l_rate = l_rate
 
     def __repr__(self) -> str:
-        return "P_wghts%s" % (self.weights)
+        return f"P_wghts {self.weights}"
 
     def w_a(self, inpt):
         inpt = np.array(inpt)
@@ -44,7 +44,7 @@ class Dot(pyglet.shapes.Circle):
         self.color = color if self.answ == 1 else (200, 200, 200)
 
     def __repr__(self) -> str:
-        return "Point %s, %s, %s" % (self.x, self.y, self.answ)
+        return f"Point ({self.x:>6.2f}, {self.y:>6.2f}, {self.answ})"
 
 
 class Canvas(pyglet.window.Window):
@@ -63,6 +63,7 @@ class Canvas(pyglet.window.Window):
             xi = np.random.uniform(0, WIN_X)
             yi = np.random.uniform(0, WIN_Y)
             self.list_of_obj.append(Dot(xi, yi, 3, color=(200, 100, 100), batch=self.batch))
+            print(self.list_of_obj[-1])
 
     def update(self, dt):
         # for obj in self.list_of_obj:
@@ -76,6 +77,7 @@ class Canvas(pyglet.window.Window):
 
 canvas = Canvas(WIN_X, WIN_Y, NUM_OBJECTS)
 perc1 = Perceptron(2, 0.1)
+print(perc1)
 
 x1 = 0
 x2 = WIN_X
