@@ -5,16 +5,14 @@ import numpy as np
 WIN_X = 400
 WIN_Y = 400
 NUM_OBJECTS = 500
-SLOPE = -0.3
-# np.random.uniform(
-#     -1,
-#     1,
-# )
-INTERCEPT = 0.4
-# np.random.uniform(
-#     0,
-#     WIN_X,
-# )
+SLOPE = np.random.uniform(
+    -1,
+    1,
+)
+INTERCEPT = np.random.uniform(
+    -1,
+    1,
+)
 X_MIN = -1
 X_MAX = 1
 Y_MIN = -1
@@ -35,7 +33,7 @@ class Perceptron:
     def __init__(self, shape, l_rate):
         self.weights = np.random.uniform(-1, 1, shape)
         self.l_rate = l_rate
-        self.line = pyglet.shapes.Line(0, 0, 0, 0, 2, batch=canvas.batch)
+        self.line = pyglet.shapes.Line(0, 0, WIN_X, WIN_Y, 2, batch=canvas.batch)
 
     def __repr__(self) -> str:
         return f"P_wghts {self.weights}"
@@ -50,10 +48,17 @@ class Perceptron:
         dmx2 = X_MAX
         dmy1 = (-self.weights[2] - self.weights[0] * dmx1) / self.weights[1]
         dmy2 = (-self.weights[2] - self.weights[0] * dmx2) / self.weights[1]
-        self.line.x1 = renormalize(dmx1, (X_MIN, X_MAX), (0, WIN_X))
+        self.line.x = renormalize(dmx1, (X_MIN, X_MAX), (0, WIN_X))
         self.line.x2 = renormalize(dmx2, (X_MIN, X_MAX), (0, WIN_X))
-        self.line.y1 = renormalize(dmy1, (Y_MIN, Y_MAX), (0, WIN_Y))
+        self.line.y = renormalize(dmy1, (Y_MIN, Y_MAX), (0, WIN_Y))
         self.line.y2 = renormalize(dmy2, (Y_MIN, Y_MAX), (0, WIN_Y))
+        # print(dmx1, dmx2, dmy1, dmy2)
+        print(
+            # self.line.x1,
+            # self.line.x2,
+            self.line.y,
+            self.line.y2,
+        )
 
     def feed_forward(self, position):
         sum = 0
@@ -117,6 +122,7 @@ class Canvas(pyglet.window.Window):
 
     def update(self, dt, perceptron):
         perceptron.update_line()
+        print(perceptron.line.y, perceptron.line.y2)
         for i in self.list_of_obj:
             perceptron.train(i)
         print(perceptron)
