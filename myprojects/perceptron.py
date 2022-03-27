@@ -33,7 +33,7 @@ class Perceptron:
     def __init__(self, shape, l_rate):
         self.weights = np.random.uniform(-1, 1, shape)
         self.l_rate = l_rate
-        self.line = pyglet.shapes.Line(0, 0, WIN_X, WIN_Y, 2, batch=canvas.batch)
+        self.line = pyglet.shapes.Line(0, 0, 0, 0, 2, batch=canvas.batch)
 
     def __repr__(self) -> str:
         return f"P_wghts {self.weights}"
@@ -44,21 +44,14 @@ class Perceptron:
         return -1
 
     def update_line(self):
-        dmx1 = X_MIN
+        dmx = X_MIN
         dmx2 = X_MAX
-        dmy1 = (-self.weights[2] - self.weights[0] * dmx1) / self.weights[1]
+        dmy = (-self.weights[2] - self.weights[0] * dmx) / self.weights[1]
         dmy2 = (-self.weights[2] - self.weights[0] * dmx2) / self.weights[1]
-        self.line.x = renormalize(dmx1, (X_MIN, X_MAX), (0, WIN_X))
+        self.line.x = renormalize(dmx, (X_MIN, X_MAX), (0, WIN_X))
         self.line.x2 = renormalize(dmx2, (X_MIN, X_MAX), (0, WIN_X))
-        self.line.y = renormalize(dmy1, (Y_MIN, Y_MAX), (0, WIN_Y))
+        self.line.y = renormalize(dmy, (Y_MIN, Y_MAX), (0, WIN_Y))
         self.line.y2 = renormalize(dmy2, (Y_MIN, Y_MAX), (0, WIN_Y))
-        # print(dmx1, dmx2, dmy1, dmy2)
-        print(
-            # self.line.x1,
-            # self.line.x2,
-            self.line.y,
-            self.line.y2,
-        )
 
     def feed_forward(self, position):
         sum = 0
@@ -69,17 +62,8 @@ class Perceptron:
     def train(self, point):
         guess = self.feed_forward(point.coords)
         error_i = point.answ - guess
-        # print(error_i)
         for i in range(len(self.weights)):
             self.weights[i] += self.l_rate * error_i * point.coords[i]
-
-    # def w_a(self, inpt):
-    #     inpt = np.array(inpt)
-    #     return np.dot(self.weights, inpt)
-
-    # def guess(self, inpt):
-    #     wa = self.w_a(inpt)
-    #     return 1 if wa >= 0 else -1
 
 
 class Dot(pyglet.shapes.Circle):
@@ -118,14 +102,11 @@ class Canvas(pyglet.window.Window):
             xi = np.random.uniform(0, WIN_X)
             yi = np.random.uniform(0, WIN_Y)
             self.list_of_obj.append(Dot(xi, yi, 3, color=(200, 100, 100), batch=self.batch))
-            print(self.list_of_obj[-1].coords)
 
     def update(self, dt, perceptron):
         perceptron.update_line()
-        print(perceptron.line.y, perceptron.line.y2)
         for i in self.list_of_obj:
             perceptron.train(i)
-        print(perceptron)
 
     def on_draw(self):
         self.clear()
@@ -133,17 +114,14 @@ class Canvas(pyglet.window.Window):
 
 
 canvas = Canvas(WIN_X, WIN_Y, NUM_OBJECTS)
-perceptron = Perceptron(3, 0.001)
-# print(perc1)
+perceptron = Perceptron(3, 0.0001)
 
-x1 = renormalize(X_MIN, (X_MIN, X_MAX), (0, WIN_X))
-y1 = renormalize(calc_line(X_MIN), (Y_MIN, Y_MAX), (0, WIN_Y))
+x = renormalize(X_MIN, (X_MIN, X_MAX), (0, WIN_X))
+y = renormalize(calc_line(X_MIN), (Y_MIN, Y_MAX), (0, WIN_Y))
 x2 = renormalize(X_MAX, (X_MIN, X_MAX), (0, WIN_X))
 y2 = renormalize(calc_line(X_MAX), (Y_MIN, Y_MAX), (0, WIN_Y))
-# print(x1, y1, x2, y2)
-border_line = pyglet.shapes.Line(x1, y1, x2, y2, 2, batch=canvas.batch)
+border_line = pyglet.shapes.Line(x, y, x2, y2, 2, batch=canvas.batch)
 
 
-# pyglet.clock.schedule(canvas.update)
-pyglet.clock.schedule_interval(canvas.update, 1 / 2, perceptron)
+pyglet.clock.schedule_interval(canvas.update, 1 / 10, perceptron)
 pyglet.app.run()
