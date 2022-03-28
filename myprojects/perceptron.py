@@ -2,8 +2,8 @@ import pyglet
 import numpy as np
 
 
-WIN_X = 400
-WIN_Y = 400
+WIN_X = 750
+WIN_Y = 750
 NUM_OBJECTS = 500
 SLOPE = np.random.uniform(
     -1,
@@ -33,7 +33,7 @@ class Perceptron:
     def __init__(self, shape, l_rate):
         self.weights = np.random.uniform(-1, 1, shape)
         self.l_rate = l_rate
-        self.line = pyglet.shapes.Line(0, 0, 0, 0, 2, batch=canvas.batch)
+        self.line = pyglet.shapes.Line(0, 0, 0, 0, 1, batch=canvas.batch)
 
     def __repr__(self) -> str:
         return f"P_wghts {self.weights}"
@@ -120,8 +120,8 @@ x = renormalize(X_MIN, (X_MIN, X_MAX), (0, WIN_X))
 y = renormalize(calc_line(X_MIN), (Y_MIN, Y_MAX), (0, WIN_Y))
 x2 = renormalize(X_MAX, (X_MIN, X_MAX), (0, WIN_X))
 y2 = renormalize(calc_line(X_MAX), (Y_MIN, Y_MAX), (0, WIN_Y))
-border_line = pyglet.shapes.Line(x, y, x2, y2, 2, batch=canvas.batch)
+border_line = pyglet.shapes.Line(x, y, x2, y2, 3, batch=canvas.batch)
 
 
-pyglet.clock.schedule_interval(canvas.update, 1 / 10, perceptron)
+pyglet.clock.schedule_interval(canvas.update, 0.1, perceptron)
 pyglet.app.run()
