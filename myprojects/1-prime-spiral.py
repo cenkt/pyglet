@@ -76,4 +76,4 @@ class Letters(pyglet.window.Window):
 
 letters = Letters(x, y)
 pyglet.clock.schedule_interval(letters.update, 1 / 1000)
-pyglet.app.run()
+pyglet.app.run(interval=1/120)

@@ -70,9 +70,9 @@ class Dot(pyglet.shapes.Circle):
     def __init__(self, x, y, radius, color, batch):
         pyglet.shapes.Circle.__init__(
             self,
-            x=x,
-            y=y,
-            radius=radius,
+            x,
+            y,
+            radius,
             color=color,
             batch=batch,
         )

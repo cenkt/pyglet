@@ -95,4 +95,4 @@ class Planet(pyglet.shapes.Circle):
 
 space = Space(win_x, win_y, num_objects)
 pyglet.clock.schedule(space.update)
-pyglet.app.run()
+pyglet.app.run(interval=1/120)

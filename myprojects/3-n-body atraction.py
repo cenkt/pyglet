@@ -8,8 +8,8 @@ import math
 win_x = 1100
 win_y = 900
 num_objects = 10
-speed_range = 5
-speed_mag_limit = 5
+speed_range = 1
+speed_mag_limit = 10
 acc_range = 0
 acc_mag_limit = 0.05
 lim_mass = 3
@@ -107,4 +107,4 @@ class Planet(pyglet.shapes.Circle):
 
 space = Space(win_x, win_y, num_objects)
 pyglet.clock.schedule(space.update)
-pyglet.app.run()
+pyglet.app.run(interval=1/120)
